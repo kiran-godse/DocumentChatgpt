@@ -7,7 +7,7 @@ on:
 
 jobs:
   setup-node:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Check out repository
         uses: actions/checkout@v2
@@ -19,7 +19,7 @@ jobs:
   triage:
     if: >-
       github.event.discussion.category.name == 'General'
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -31,7 +31,7 @@ jobs:
 
   use_gpt:
     needs: triage
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Get discussion info from previous step
         id: discussion_info
@@ -39,9 +39,9 @@ jobs:
           echo "body=${{ needs.triage.outputs.body }}" >> $GITHUB_ENV
 
       - name: Use ChatGPT API
-        working-directory: ./DocumentChatgpt
+        working-directory: ./DocumentChatgpt/DocumentChatgpt
         run: |
-          $env:DISCUSSION_BODY="${{ needs.triage.outputs.body }}"
-          Write-Host "Using Discussion Body: $env:DISCUSSION_BODY"
-          Write-Host "Running ChatGPT script..."
-          node .\chat.js
+          DISCUSSION_BODY="${{ needs.triage.outputs.body }}"
+          echo "Using Discussion Body: $DISCUSSION_BODY"
+          echo "Running ChatGPT script..."
+          node ./chat.js
