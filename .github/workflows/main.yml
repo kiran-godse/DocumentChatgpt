@@ -6,6 +6,16 @@ on:
       - created
 
 jobs:
+  setup-node:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14' 
+
   triage:
     if: >-
       github.event.discussion.category.name == 'General'
@@ -34,4 +44,3 @@ jobs:
           echo "Using Discussion Body: $DISCUSSION_BODY"
           echo "Running ChatGPT script..."
           node chatgpt.js
-
