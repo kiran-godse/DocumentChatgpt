@@ -1,7 +1,7 @@
 const axios = require('axios');
 
 const API_URL = "https://api.openai.com/v1/chat/completions";
-const API_KEY = "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";
+const API_KEY = "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";
 
 const discussionBody = process.env.DISCUSSION_BODY;
 
