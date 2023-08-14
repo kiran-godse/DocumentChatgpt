@@ -6,7 +6,19 @@ on:
       - created
 
 jobs:
+  setup-node:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14' 
+
   triage:
+    if: >-
+      github.event.discussion.category.name == 'General'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -15,7 +27,7 @@ jobs:
       - name: Extract discussion information
         id: prompt
         run: |
-          echo "DISCUSSION_BODY=$(echo '${{ toJson(github.event) }}' | jq -r '.discussion.body')" >> $GITHUB_ENV
+          echo "body=$(echo '${{ toJson(github.event) }}' | jq -r '.discussion.body')" >> $GITHUB_ENV
 
   use_gpt:
     needs: triage
@@ -24,24 +36,12 @@ jobs:
       - name: Get discussion info from previous step
         id: discussion_info
         run: |
-          echo "DISCUSSION_BODY=${{ needs.triage.outputs.DISCUSSION_BODY }}" >> $GITHUB_ENV
+          echo "body=${{ needs.triage.outputs.body }}" >> $GITHUB_ENV
 
-      - name: Print Discussion Body
+      - name: Use ChatGPT API
         run: |
+          DISCUSSION_BODY="${{ needs.triage.outputs.body }}"
           echo "Using Discussion Body: $DISCUSSION_BODY"
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14' 
-
-      - name: Install Dependencies
-        run: npm install
-        working-directory: ./DocumentChatgpt
-
-      - name: Run ChatGPT Script
-        run: node chat.js
-        working-directory: ./DocumentChatgpt
-        env:
-          OPENAI_API_KEY: ${{ secrets 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  }}
-          DISCUSSION_BODY: ${{ needs.triage.outputs.DISCUSSION_BODY }}
+          echo "Running ChatGPT script..."
+          working-directory: ./DocumentChatgpt
+          node ./chat.js
