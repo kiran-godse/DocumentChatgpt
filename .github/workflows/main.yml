@@ -24,3 +24,4 @@ jobs:
 
       - name: Run ChatGPT Script
         run: node chat.js
+        working-directory: ./DocumentChatgpt
