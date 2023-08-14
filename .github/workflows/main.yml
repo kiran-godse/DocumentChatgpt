@@ -4,7 +4,7 @@ on:
    discussion:
     types:
       - opened
-      - edited  # Trigger on issue edit
+      - edited 
 
 jobs:
   openai_conversation:
