@@ -23,5 +23,5 @@ jobs:
         run: ls -la
 
       - name: Run ChatGPT Script
-        run: node chatgpt.js
+        run: node chat.js
         working-directory: ./DocumentChatgpt
