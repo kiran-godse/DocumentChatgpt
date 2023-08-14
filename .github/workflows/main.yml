@@ -34,3 +34,4 @@ jobs:
           echo "Using Discussion Body: $DISCUSSION_BODY"
           echo "Running ChatGPT script..."
           node chatgpt.js
+
