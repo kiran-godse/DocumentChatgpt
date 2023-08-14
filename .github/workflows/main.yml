@@ -33,7 +33,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '14' # Replace with a stable Node.js version
+          node-version: '14' 
 
       - name: Install Dependencies
         run: npm install
@@ -43,5 +43,5 @@ jobs:
         run: node chat.js
         working-directory: ./DocumentChatgpt
         env:
-          OPENAI_API_KEY: ${{ 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 }} 
+          OPENAI_API_KEY: ${{ secrets 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  }}
           DISCUSSION_BODY: ${{ needs.triage.outputs.DISCUSSION_BODY }}
