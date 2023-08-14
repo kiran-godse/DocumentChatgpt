@@ -43,4 +43,4 @@ jobs:
           DISCUSSION_BODY="${{ needs.triage.outputs.body }}"
           echo "Using Discussion Body: $DISCUSSION_BODY"
           echo "Running ChatGPT script..."
-          node chatgpt.js
+          node chat.js
