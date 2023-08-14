@@ -44,4 +44,5 @@ jobs:
           echo "Using Discussion Body: $DISCUSSION_BODY"
           echo "Running ChatGPT script..."
           working-directory: ./DocumentChatgpt
-          run: node ./chat.js
+          run: |
+            node ./chat.js
