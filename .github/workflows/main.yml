@@ -39,8 +39,9 @@ jobs:
           echo "body=${{ needs.triage.outputs.body }}" >> $GITHUB_ENV
 
       - name: Use ChatGPT API
+        working-directory: ./DocumentChatgpt/DocumentChatgpt
         run: |
-          DISCUSSION_BODY="${{ needs.triage.outputs.body }}"
-          echo "Using Discussion Body: $DISCUSSION_BODY"
-          echo "Running ChatGPT script..."
-          node /home/runner/work/DocumentChatgpt/DocumentChatgpt/chat.js
+           DISCUSSION_BODY="${{ needs.triage.outputs.body }}"
+           echo "Using Discussion Body: $DISCUSSION_BODY"
+           echo "Running ChatGPT script..."
+           node chat.js
