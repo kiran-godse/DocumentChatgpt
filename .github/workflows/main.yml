@@ -1,47 +1,35 @@
-name: Trigger Workflow on Discussion
+name: Run OpenAI Conversation and Get Response
 
 on:
-  discussion:
+   discussion:
     types:
-      - created
+      - opened
+      - edited  # Trigger on issue edit
 
 jobs:
-  setup-node:
+  openai_conversation:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Check out repository
+      - name: Checkout Repository
         uses: actions/checkout@v2
+
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: '14'  
 
-  triage:
-    if: >-
-      github.event.discussion.category.name == 'General'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+      - name: Install Dependencies
+        run: npm install
 
-      - name: Extract discussion information
-        id: prompt
+      - name: Extract Discussion Body
+        id: extract
         run: |
-          echo "body=$(echo '${{ toJson(github.event) }}' | jq -r '.discussion.body')" >> $GITHUB_ENV
+          echo "DISCUSSION_BODY=$(jq -r .issue.body "$GITHUB_EVENT_PATH")" >> $GITHUB_ENV
+        shell: bash
 
-  use_gpt:
-    needs: triage
-    runs-on: ubuntu-latest
-    steps:
-      - name: Get discussion info from previous step
-        id: discussion_info
-        run: |
-          echo "body=${{ needs.triage.outputs.body }}" >> $GITHUB_ENV
-
-      - name: Use ChatGPT API
-        working-directory: ./DocumentChatgpt/DocumentChatgpt
-        run: |
-           DISCUSSION_BODY="${{ needs.triage.outputs.body }}"
-           echo "Using Discussion Body: $DISCUSSION_BODY"
-           echo "Running ChatGPT script..."
-           node chat.js
+      - name: Run OpenAI Conversation Script
+        env:
+          API_KEY: ${{ secrets.CHATGPT_API_KEY }} 
+          PROMPT: ${{ env.DISCUSSION_BODY }}
+        run: node index.js  
