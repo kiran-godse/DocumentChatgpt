@@ -1,4 +1,4 @@
-name: Trigger Workflow on Discussion
+name: Trigger ChatGPT on Discussion
 
 on:
   discussion:
@@ -6,44 +6,21 @@ on:
       - created
 
 jobs:
-  setup-node:
+  run_chatgpt:
     runs-on: ubuntu-latest
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v2
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14' 
 
-  triage:
-    if: >-
-      github.event.discussion.category.name == 'General'
-    runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Extract discussion information
-        id: prompt
-        run: |
-          echo "body=$(echo '${{ toJson(github.event) }}' | jq -r '.discussion.body')" >> $GITHUB_ENV
+      - name: Set Discussion Body
+        run: echo "DISCUSSION_BODY=${{ toJson(github.event.discussion.body) }}" >> $GITHUB_ENV
 
-  use_gpt:
-    needs: triage
-    runs-on: ubuntu-latest
-    steps:
-      - name: Get discussion info from previous step
-        id: discussion_info
-        run: |
-          echo "body=${{ needs.triage.outputs.body }}" >> $GITHUB_ENV
-          
+      - name: Print Current Directory
+        run: pwd
+
       - name: List Files in Directory
         run: ls -la
 
-      - name: Use ChatGPT API
-        run: |
-          DISCUSSION_BODY="${{ needs.triage.outputs.body }}"
-          echo "Using Discussion Body: $DISCUSSION_BODY"
-          echo "Running ChatGPT script..."
-          node ./chat.js
+      - name: Run ChatGPT Script
+        run: node chat.js
