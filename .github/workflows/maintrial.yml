@@ -34,12 +34,9 @@ jobs:
       - name: Display discussion title
         run: |
           echo "Discussion Title: ${{ needs.triage.outputs.title }}"
-        working-directory: ${{ env.PWD }}
       - name: Display discussion body
         run: |
           echo "Discussion Body: ${{ needs.triage.outputs.body }}"
-        working-directory: ${{ env.PWD }}
       - name: Use ChatGPT API
         run: |
            node main.js # Make sure to use the correct filename here
-        working-directory: ${{ env.PWD }}
