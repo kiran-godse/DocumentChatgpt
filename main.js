@@ -16,7 +16,7 @@ const generate = async () => {
     }, {
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer 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",
+        "Authorization": "Bearer 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",
       },
     });
     console.log('API_URL:', API_URL);
