@@ -7,6 +7,8 @@ const discussionBody = "What is Github?"; //process.env.DISCUSSION_BODY;
 
 const generate = async () => {
   try {
+    console.log('API_URL:', API_URL);
+    console.log('discussionBody:', discussionBody);
     const response = await axios.post(API_URL, {
       model: "gpt-3.5-turbo",
       messages: [{ role: "system", content: discussionBody }],
