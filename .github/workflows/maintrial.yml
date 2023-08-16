@@ -39,4 +39,5 @@ jobs:
           echo "Discussion Body: ${{ needs.triage.outputs.body }}"
       - name: Use ChatGPT API
         run: |
-           node main.js # Make sure to use the correct filename here
+         node main.js 
+
