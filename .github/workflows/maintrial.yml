@@ -37,7 +37,11 @@ jobs:
       - name: Display discussion body
         run: |
           echo "Discussion Body: ${{ needs.triage.outputs.body }}"
+      - name: Print Current Directory
+        run: |
+         pwd
+
       - name: Use ChatGPT API
         run: |
          node main.js 
-
+        working-directory: ./
