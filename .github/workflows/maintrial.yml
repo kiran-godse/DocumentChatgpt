@@ -1,5 +1,4 @@
 name: Trigger Workflow on Discussion
-
 on:
   discussion:
     types:
@@ -16,23 +15,33 @@ jobs:
       - name: Extract discussion information
         id: prompt
         run: |
+          echo "DISCUSSION_TITLE=${{ github.event.discussion.title }}" >> $GITHUB_ENV
           echo "DISCUSSION_BODY=${{ github.event.discussion.body }}" >> $GITHUB_ENV
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  use_gpt:
-    needs: triage
-    runs-on: ubuntu-latest
-    steps:
-      - name: Get discussion body from previous step
-        id: discussion_info
-        run: |
-          echo "DISCUSSION_BODY=${{ needs.triage.outputs.DISCUSSION_BODY }}" >> $GITHUB_ENV
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Display discussion body
-        run: |
-          echo "Discussion Body: ${{ needs.triage.outputs.DISCUSSION_BODY }}"
-      - name: Run ChatGPT script
-        run: |
-           node main.js
+    
+    use_gpt:
+      needs: triage
+      runs-on: ubuntu-latest
+      steps:
+        - name: Set up Node.js
+          uses: actions/setup-node@v2
+          with:
+            node-version: 14
+        
+        - name: Checkout repository
+          uses: actions/checkout@v2
+        
+        - name: Display discussion title
+          run: |
+            echo "Discussion Title: $DISCUSSION_TITLE"
+        
+        - name: Display discussion body
+          run: |
+            echo "Discussion Body: $DISCUSSION_BODY"
+        
+        - name: Run Node.js script
+          run: |
+            node main.js
+          env:
+            DISCUSSION_BODY: ${{ env.DISCUSSION_BODY }}
