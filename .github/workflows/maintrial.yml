@@ -20,28 +20,28 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
-    use_gpt:
-      needs: triage
-      runs-on: ubuntu-latest
-      steps:
-        - name: Set up Node.js
-          uses: actions/setup-node@v2
-          with:
-            node-version: 14
+  use_gpt:
+    needs: triage
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
         
-        - name: Checkout repository
-          uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
         
-        - name: Display discussion title
-          run: |
-            echo "Discussion Title: $DISCUSSION_TITLE"
+      - name: Display discussion title
+        run: |
+          echo "Discussion Title: $DISCUSSION_TITLE"
         
-        - name: Display discussion body
-          run: |
-            echo "Discussion Body: $DISCUSSION_BODY"
+      - name: Display discussion body
+        run: |
+          echo "Discussion Body: $DISCUSSION_BODY"
         
-        - name: Run Node.js script
-          run: |
-            node main.js
-          env:
-            DISCUSSION_BODY: ${{ env.DISCUSSION_BODY }}
+      - name: Run Node.js script
+        run: |
+          node main.js
+        env:
+          DISCUSSION_BODY: ${{ env.DISCUSSION_BODY }}
