@@ -18,7 +18,7 @@ const generate = async () => {
       },
     });
 
-    const generatedResponse = response.data.choices[0].text();
+    const generatedResponse = response.data.choices[0].text;
     console.log('Generated Response:', generatedResponse);
   } catch (error) {
     console.error('Error:', error);
