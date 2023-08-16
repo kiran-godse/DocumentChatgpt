@@ -1,4 +1,5 @@
 name: Trigger Workflow on Discussion
+
 on:
   discussion:
     types:
@@ -12,6 +13,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+      - name: Install Dependencies
+        run: npm install
       - name: Extract discussion information
         id: prompt
         run: |
@@ -37,11 +40,6 @@ jobs:
       - name: Display discussion body
         run: |
           echo "Discussion Body: ${{ needs.triage.outputs.body }}"
-      - name: Print Current Directory
-        run: |
-         pwd
-
       - name: Use ChatGPT API
         run: |
-         node main.js 
-        working-directory: ./
+           node ${{ github.workspace }}/main.js
