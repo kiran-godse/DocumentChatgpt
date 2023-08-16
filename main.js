@@ -9,7 +9,7 @@ const generate = async () => {
   try {
     const response = await axios.post(API_URL, {
       model: "gpt-3.5-turbo",
-      messages: [{ role: "user", content: discussionBody }],
+      messages: [{ role: "system", content: discussionBody }],
       max_tokens: 100
     }, {
       headers: {
