@@ -15,8 +15,10 @@ jobs:
       - name: Extract discussion information
         id: prompt
         run: |
-          echo "body=$(echo '${{ github.event.discussion.body }}')" >> $GITHUB_ENV
-          echo "title=$(echo '${{ github.event.discussion.title }}')" >> $GITHUB_ENV
+          echo "title=${{ github.event.discussion.title }}" >> $GITHUB_ENV
+          echo "body=${{ github.event.discussion.body }}" >> $GITHUB_ENV
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   use_gpt:
     needs: triage
@@ -27,6 +29,8 @@ jobs:
         run: |
           echo "title=${{ needs.triage.outputs.title }}" >> $GITHUB_ENV
           echo "body=${{ needs.triage.outputs.body }}" >> $GITHUB_ENV
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Display discussion title
         run: |
           echo "Discussion Title: ${{ needs.triage.outputs.title }}"
@@ -34,5 +38,7 @@ jobs:
         run: |
           echo "Discussion Body: ${{ needs.triage.outputs.body }}"
       - name: Use ChatGPT API
+        working-directory: ./DocumentChatgpt
         run: |
            node main.js 
+        
