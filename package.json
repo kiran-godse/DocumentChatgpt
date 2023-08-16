@@ -1,8 +1,9 @@
 {
   "name": "documentchatgpt",
   "version": "1.0.0",
+  "type": "module",
   "description": "",
-  "main": "chatgpt.js",
+  "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -10,6 +11,7 @@
   "license": "ISC",
   "keywords": [],
   "dependencies": {
-    "axios": "^1.4.0"
+    "axios": "^1.4.0",
+    "node-fetch": "^3.3.2"
   }
 }

@@ -1,29 +1,38 @@
-const axios = require('axios');
+//const axios = require('axios');
+//const fetch = require('node-fetch');
+import fetch from "node-fetch";
+//const fetch = fetch(import.meta.url);
+
+global.require = fetch; //this will make require at the global scobe and treat it like the original require
 
 const API_URL = "https://api.openai.com/v1/chat/completions";
-const API_KEY = "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";
+const API_KEY = "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";
 
-const discussionBody = "\"What is Github?\""; //process.env.DISCUSSION_BODY;
-
+const discussionBody = "\"What is Github?\""; 
 const generate = async () => {
   try {
-    console.log('API_URL:', API_URL);
-    console.log('discussionBody:', discussionBody);
-    const response = await axios.post(API_URL, {
-      model: "gpt-3.5-turbo",
-      messages: [{ role: "system", content: discussionBody }],
-      max_tokens: 100
-    }, {
+    const response = await fetch(API_URL, {
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer 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",
+        "Authorization": "Bearer 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",
       },
+      body: JSON.stringify({
+        messages: [{ role: "system", content: discussionBody }],
+        max_tokens: 100,
+        model: "gpt-3.5-turbo"
+      })
+  
     });
+    const responseData = await response.json();
+    if (Array.isArray(responseData.choices) && responseData.choices.length > 0) {
+      const assistantReply = responseData.choices[0].message.content;
+      console.log("Assistant:", assistantReply);
+  } else {
+      console.log("No valid response from the assistant.");
+  }
     console.log('API_URL:', API_URL);
-    console.log('discussionBody:', discussionBody);
-    console.log('response', response.data);
-    const generatedResponse = response.data.choices[0].text;
-    console.log('Generated Response:', generatedResponse);
+    const generatedResponse = responseData;
   } catch (error) {
     console.error('Error:', error);
   }

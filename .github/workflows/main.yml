@@ -1,11 +1,7 @@
 name: Run OpenAI Conversation and Get Response
-
 on:
-   discussion:
-    types:
-      - opened
-      - edited 
-
+    discussion:
+      types: [created, edited]
 jobs:
   openai_conversation:
     runs-on: ubuntu-latest
