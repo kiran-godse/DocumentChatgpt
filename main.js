@@ -10,14 +10,16 @@ const generate = async () => {
     const response = await axios.post(API_URL, {
       model: "gpt-3.5-turbo",
       messages: [{ role: "user", content: discussionBody }],
-      max_tokens: 100,
+      max_tokens: 100
     }, {
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer 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",
       },
     });
-
+    console.log('API_URL:', API_URL);
+    console.log('discussionBody:', discussionBody);
+    console.log('response', response.data);
     const generatedResponse = response.data.choices[0].text;
     console.log('Generated Response:', generatedResponse);
   } catch (error) {
