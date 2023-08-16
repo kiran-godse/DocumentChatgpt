@@ -13,13 +13,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-      - name: Install Dependencies
-        run: npm install
       - name: Extract discussion information
         id: prompt
         run: |
-          echo "title=${{ github.event.discussion.title }}" >> $GITHUB_ENV
-          echo "body=${{ github.event.discussion.body }}" >> $GITHUB_ENV
+          echo "DISCUSSION_BODY=${{ github.event.discussion.body }}" >> $GITHUB_ENV
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -27,23 +24,15 @@ jobs:
     needs: triage
     runs-on: ubuntu-latest
     steps:
-      - name: Get discussion info from previous step
+      - name: Get discussion body from previous step
         id: discussion_info
         run: |
-          echo "title=${{ needs.triage.outputs.title }}" >> $GITHUB_ENV
-          echo "body=${{ needs.triage.outputs.body }}" >> $GITHUB_ENV
+          echo "DISCUSSION_BODY=${{ needs.triage.outputs.DISCUSSION_BODY }}" >> $GITHUB_ENV
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Display discussion title
-        run: |
-          echo "Discussion Title: ${{ needs.triage.outputs.title }}"
       - name: Display discussion body
         run: |
-          echo "Discussion Body: ${{ needs.triage.outputs.body }}"
-      - name: List contents of root directory
-        run: ls -la
-        working-directory: ${{ github.workspace }}
-
-      - name: Use ChatGPT API
+          echo "Discussion Body: ${{ needs.triage.outputs.DISCUSSION_BODY }}"
+      - name: Run ChatGPT script
         run: |
-           node ${{ github.workspace }}/main.js
+           node main.js
