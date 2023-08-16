@@ -40,6 +40,10 @@ jobs:
       - name: Display discussion body
         run: |
           echo "Discussion Body: ${{ needs.triage.outputs.body }}"
+      - name: List contents of root directory
+        run: ls -la
+        working-directory: ${{ github.workspace }}
+
       - name: Use ChatGPT API
         run: |
            node ${{ github.workspace }}/main.js
